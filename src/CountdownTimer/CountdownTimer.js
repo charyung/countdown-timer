@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import { useInterval } from './CountdownUtils';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import classes from './CountdownTimer.module.css';
+import classes from './CountdownTimer.module.scss';
 
 const DigitUnit = props => {
   return (
@@ -41,7 +41,7 @@ Digit.propTypes = {
   id: PropTypes.string, // For key purposes
   max: PropTypes.number, // Highest digit. For example, 5 for the tens place of a secs counter because there can only be 60 secs in a minute
   start: PropTypes.number, // The starting digit
-  flipIndicator: PropTypes.number // When this prop hits 0, then this digit plays the flip animation.
+  flipIndicator: PropTypes.bool // When this prop hits 0, then this digit plays the flip animation.
 };
 
 Digit.defaultProps = {
@@ -160,7 +160,6 @@ const CdTimer = props => {
     <div
       className={classnames(
         'text-center',
-        props.className,
         classes.CountdownTimer,
         {
           [classes.SecondsLeft]: duration < 60
