@@ -1,8 +1,8 @@
-import React, { useState, Fragment } from "react";
-import { useInterval } from "./CountdownUtils";
-import PropTypes from "prop-types";
-import classnames from "classnames";
-import classes from "./CountdownTimer.module.scss";
+import React, { useState, Fragment } from 'react';
+import { useInterval } from './CountdownUtils';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import classes from './CountdownTimer.module.scss';
 
 const DigitUnit = props => {
   return (
@@ -63,16 +63,16 @@ const CdTimer = props => {
   for (let i = 0; i < daysString.length; i++) {
     daysData.push({ max: 9, flip: 84000 * i });
   }
-  timeData["days"] = {
-    cssClass: "Days",
+  timeData['days'] = {
+    cssClass: 'Days',
     formatted: days,
     digits: daysData
   };
 
   const hours = Math.floor(diff / 3600); // 60 * 60
   diff -= hours * 3600;
-  timeData["hours"] = {
-    cssClass: "Hours",
+  timeData['hours'] = {
+    cssClass: 'Hours',
     formatted: hours,
     digits: [
       { max: 2, flip: 36000 },
@@ -82,8 +82,8 @@ const CdTimer = props => {
 
   const mins = Math.floor(diff / 60);
   diff -= mins * 60;
-  timeData["mins"] = {
-    cssClass: "Mins",
+  timeData['mins'] = {
+    cssClass: 'Mins',
     formatted: mins,
     digits: [
       { max: 5, flip: 600 },
@@ -92,8 +92,8 @@ const CdTimer = props => {
   };
 
   const secs = Math.floor(diff);
-  timeData["secs"] = {
-    cssClass: "Secs",
+  timeData['secs'] = {
+    cssClass: 'Secs',
     formatted: secs,
     digits: [
       { max: 5, flip: 10 },
@@ -115,22 +115,22 @@ const CdTimer = props => {
 
   Object.keys(timeData).forEach(unit => {
     const time = timeData[unit];
-    const timeString = time["formatted"].toString().split("");
+    const timeString = time['formatted'].toString().split('');
     renderElements[unit] = (
       <div
         className={classnames(
-          "inline-block",
+          'inline-block',
           classes.Unit,
-          classes[timeData[unit]["cssClass"]]
+          classes[timeData[unit]['cssClass']]
         )}
       >
         {timeString.map((digit, i) => (
           <Digit
-            id={`${unit}-${i}`}
+            key={`${unit}-${i}`}
             unit={unit}
             start={parseInt(digit)}
-            max={timeData[unit]["digits"][i]["max"]}
-            flipIndicator={duration % timeData[unit]["digits"][i]["flip"] === 0}
+            max={timeData[unit]['digits'][i]['max']}
+            flipIndicator={duration % timeData[unit]['digits'][i]['flip'] === 0}
           />
         ))}
         <div className={classes.UnitText}>{unit}</div>
@@ -140,29 +140,29 @@ const CdTimer = props => {
 
   return (
     <div
-      className={classnames("text-center", classes.CountdownTimer, {
+      className={classnames('text-center', classes.CountdownTimer, {
         [classes.SecondsLeft]: duration < 60
       })}
     >
-      {timeData["days"]["formatted"] > 0 ? (
+      {timeData['days']['formatted'] > 0 ? (
         <Fragment>
-          {renderElements["days"]}
+          {renderElements['days']}
           <div className={classnames(classes.UnitSeparator, classes.Days)} />
         </Fragment>
       ) : (
         <Fragment />
       )}
-      {timeData["mins"]["formatted"] > 0 ? (
+      {timeData['mins']['formatted'] > 0 ? (
         <Fragment>
-          {renderElements["hours"]}
+          {renderElements['hours']}
           <div className={classnames(classes.UnitSeparator)}>:</div>
-          {renderElements["mins"]}
+          {renderElements['mins']}
           <div className={classnames(classes.UnitSeparator)}>:</div>
         </Fragment>
       ) : (
         <Fragment />
       )}
-      {renderElements["secs"]}
+      {renderElements['secs']}
     </div>
   );
 };

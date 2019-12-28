@@ -4,10 +4,15 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = { time: new Date() };
+  }
+
   render() {
     return (
       <div className="App">
-        <CountdownTimer time={new Date().setDate(new Date().getDate() + 9999)}></CountdownTimer>
+        <CountdownTimer time={this.state.time}></CountdownTimer>
       </div>
     );
   }
