@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <CountdownTimer time={new Date().toString()}></CountdownTimer>
+        <CountdownTimer time={new Date().setDate(new Date().getDate() + 9999)}></CountdownTimer>
       </div>
     );
   }

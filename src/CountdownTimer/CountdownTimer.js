@@ -1,8 +1,8 @@
-import React, { useState, Fragment } from 'react';
-import { useInterval } from './CountdownUtils';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import classes from './CountdownTimer.module.scss';
+import React, { useState, Fragment } from "react";
+import { useInterval } from "./CountdownUtils";
+import PropTypes from "prop-types";
+import classnames from "classnames";
+import classes from "./CountdownTimer.module.scss";
 
 const DigitUnit = props => {
   return (
@@ -50,65 +50,67 @@ Digit.defaultProps = {
 };
 
 const CdTimer = props => {
-  let diff = Math.max(new Date(props.time) - new Date().getTime(), 0) / 1000;
+  let diff = Math.max(props.time - new Date().getTime(), 0) / 1000;
   const [duration, setDuration] = useState(diff);
-  const timeData = { total: Math.floor(diff) };
+  const totalTime = Math.floor(diff);
+  const timeData = {};
 
   const days = Math.floor(diff / 86400); // 60 * 60 * 24
   diff -= days * 86400;
-  timeData['days'] = {
-    cssClass: 'Days',
+  // Since days doesn't have an upper bound on its number of digits, we have to generate those
+  const daysData = [];
+  const daysString = days.toString();
+  for (let i = 0; i < daysString.length; i++) {
+    daysData.push({ max: 9, flip: 84000 * i });
+  }
+  timeData["days"] = {
+    cssClass: "Days",
     formatted: days,
-    unformatted: Math.floor(diff)
+    digits: daysData
   };
 
   const hours = Math.floor(diff / 3600); // 60 * 60
   diff -= hours * 3600;
-  timeData['hours'] = {
-    cssClass: 'Hours',
+  timeData["hours"] = {
+    cssClass: "Hours",
     formatted: hours,
-    unformatted: Math.floor(diff)
+    digits: [
+      { max: 2, flip: 36000 },
+      { max: 9, flip: 3600 }
+    ]
   };
 
   const mins = Math.floor(diff / 60);
   diff -= mins * 60;
-  timeData['mins'] = {
-    cssClass: 'Mins',
+  timeData["mins"] = {
+    cssClass: "Mins",
     formatted: mins,
-    unformatted: Math.floor(diff)
+    digits: [
+      { max: 5, flip: 600 },
+      { max: 9, flip: 60 }
+    ]
   };
 
   const secs = Math.floor(diff);
-  timeData['secs'] = {
-    cssClass: 'Secs',
+  timeData["secs"] = {
+    cssClass: "Secs",
     formatted: secs,
-    unformatted: 0
+    digits: [
+      { max: 5, flip: 10 },
+      { max: 9, flip: 1 }
+    ]
   };
 
-  const convertedTime = { days, hours, mins, secs };
-
-  const digitsData = {
-    days: {
-      tens: { max: 9, stop: 864000 },
-      ones: { max: 9, stop: 86400 }
-    },
-    hours: {
-      tens: { max: 2, stop: 36000 },
-      ones: { max: 9, stop: 3600 }
-    },
-    mins: {
-      tens: { max: 5, stop: 600 },
-      ones: { max: 9, stop: 60 }
-    },
-    secs: {
-      tens: { max: 5, stop: 10 },
-      ones: { max: 9, stop: 1 }
-    }
-  };
+  /*const digitsData = {
+    days: daysData,
+    hours: [{ max: 2, flip: 36000 }, { max: 9, flip: 3600 }],
+    mins: [{ max: 5, flip: 600 }, { max: 9, flip: 60 }],
+    secs: [{ max: 5, flip: 10 }, { max: 9, flip: 1 }]
+  };*/
 
   useInterval(
     () => {
-      setDuration(timeData['total'] - 1);
+      setDuration(totalTime - 1);
       if (Math.floor(duration) === 0 && !!props.callback) {
         props.callback.call();
       }
@@ -117,6 +119,25 @@ const CdTimer = props => {
   );
 
   const renderElements = {};
+
+  /*const daysString = timeData['days']['formatted'].toString().split('');
+
+  renderElements['days'] = (
+    <div className={classnames(
+      classes.Unit,
+      classes.Days
+    )}>
+      {daysString.map((digit, i) => (
+        <Digit
+          id={`days-${i}`}
+          unit="days"
+          start={parseInt(digit)}
+          max={9}
+          flipIndicator={duration >= 86400 * i && (duration % (86400 * 1) === 0)}
+        />
+      ))}
+    </div>
+  )
 
   Object.keys(convertedTime).forEach(unit => {
     const time = convertedTime[unit];
@@ -134,11 +155,7 @@ const CdTimer = props => {
           start={Math.trunc(time / 10)}
           max={digitsData[unit]['tens']['max']}
           flipIndicator={
-            duration >= digitsData[unit]['tens']['stop'] &&
-            !(
-              timeData[unit]['unformatted'] +
-              (timeData[unit]['formatted'] % 10)
-            )
+            duration % digitsData[unit]['tens']['flip'] === 0
           }
         />
         <Digit
@@ -147,10 +164,45 @@ const CdTimer = props => {
           start={time % 10}
           max={digitsData[unit]['ones']['max']}
           flipIndicator={
-            duration >= digitsData[unit]['ones']['stop'] &&
-            !timeData[unit]['unformatted']
+            duration % digitsData[unit]['ones']['flip'] === 0
           }
         />
+        <div className={classes.UnitText}>{unit}</div>
+      </div>
+    );
+  });*/
+
+  console.log(timeData);
+
+  Object.keys(timeData).forEach(unit => {
+    const time = timeData[unit];
+    const timeString = time["formatted"].toString().split("");
+    renderElements[unit] = (
+      <div
+        className={classnames(
+          "inline-block",
+          classes.Unit,
+          classes[timeData[unit]["cssClass"]]
+        )}
+      >
+        {/*<Digit
+          id={`${unit}-tens`}
+          unit={unit}
+          start={Math.trunc(time / 10)}
+          max={digitsData[unit]['tens']['max']}
+          flipIndicator={
+            duration % digitsData[unit]['tens']['flip'] === 0
+          }
+        />*/}
+        {timeString.map((digit, i) => (
+          <Digit
+            id={`${unit}-${i}`}
+            unit={unit}
+            start={parseInt(digit)}
+            max={timeData[unit]["digits"][i]["max"]}
+            flipIndicator={duration % timeData[unit]["digits"][i]["flip"] === 0}
+          />
+        ))}
         <div className={classes.UnitText}>{unit}</div>
       </div>
     );
@@ -158,39 +210,35 @@ const CdTimer = props => {
 
   return (
     <div
-      className={classnames(
-        'text-center',
-        classes.CountdownTimer,
-        {
-          [classes.SecondsLeft]: duration < 60
-        }
-      )}
+      className={classnames("text-center", classes.CountdownTimer, {
+        [classes.SecondsLeft]: duration < 60
+      })}
     >
-      {duration > digitsData['days']['ones']['stop'] ? (
+      {timeData["days"]["formatted"] > 0 ? (
         <Fragment>
-          {renderElements['days']}
+          {renderElements["days"]}
           <div className={classnames(classes.UnitSeparator, classes.Days)} />
         </Fragment>
       ) : (
         <Fragment />
       )}
-      {duration > digitsData['mins']['ones']['stop'] ? (
+      {timeData["mins"]["formatted"] > 0 ? (
         <Fragment>
-          {renderElements['hours']}
+          {renderElements["hours"]}
           <div className={classnames(classes.UnitSeparator)}>:</div>
-          {renderElements['mins']}
+          {renderElements["mins"]}
           <div className={classnames(classes.UnitSeparator)}>:</div>
         </Fragment>
       ) : (
         <Fragment />
       )}
-      {renderElements['secs']}
+      {renderElements["secs"]}
     </div>
   );
 };
 
 CdTimer.propTypes = {
-  time: PropTypes.string,
+  time: PropTypes.number,
   callback: PropTypes.func
 };
 

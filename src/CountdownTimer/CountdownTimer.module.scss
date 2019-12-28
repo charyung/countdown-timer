@@ -9,7 +9,7 @@
 .UnitSeparator {
   display: inline-block;
 
-  font-size: 3rem;
+  font-size: 2rem;
   margin: 0.5em 0;
   vertical-align: top;
 
@@ -36,28 +36,27 @@
   margin: 5px;
 }
 
-.Days.Unit {
-  display: block;
-}
+.Days {
+  &.Unit {
+    display: block;
+  }
+  
+  &.UnitSeparator {
+    display: none;
+  }
+  
+  .Unit:not(&) {
+    display: inline-block;
+    font-size: 3rem;
+  }
 
-.Days.UnitSeparator {
-  display: none;
-}
-
-.Unit:not(.Days) {
-  font-size: 3rem;
-}
-
-.UnitSeparator {
-  font-size: 2rem;
+  .Num {
+    color: #009dff;
+  }
 }
 
 .SecondsLeft .Secs {
   font-size: 5em;
-}
-
-.Days .Num {
-  color: #009dff;
 }
 
 .DigitUnit {
@@ -93,6 +92,7 @@
 }
 
 .Num {
+  user-select: none;
   font-size: 1em;
   line-height: 1;
   display: inline-block;
@@ -102,19 +102,41 @@
 .Up {
   border-radius: var(--countdown-digit-border-radius) var(--countdown-digit-border-radius) 0 0;
   transform-origin: bottom;
-}
-
-.Up .Num {
-  transform: translateY(0.125em);
+  
+  .Num {
+    transform: translateY(0.125em);
+  }
 }
 
 .Down {
   border-radius: 0 0 var(--countdown-digit-border-radius) var(--countdown-digit-border-radius);
   transform-origin: top;
+
+  .Num {
+    transform: translateY(calc(-0.5em - 1px)); /* half of (digit height - num height) + half of digit height + center line height */
+  }
 }
 
-.Down .Num {
-  transform: translateY(calc(-0.5em - 1px)); /* half of (digit height - num height) + half of digit height + center line height */
+.Prev {
+  .Up {
+    z-index: 3;
+    animation: flipUp .5s linear both;
+  }
+
+  .Down {
+    z-index: 2;
+  }
+}
+
+.Active {
+  .Up {
+    z-index: 2;
+  }
+
+  .Down {
+    z-index: 3;
+    animation: flipDown .5s .5s linear both;
+  }
 }
 
 @keyframes flipUp {
@@ -127,15 +149,6 @@
   }
 }
 
-.Prev .Up {
-  z-index: 3;
-  animation: flipUp .5s linear both;
-}
-
-.Active .Up {
-  z-index: 2;
-}
-
 @keyframes flipDown {
   from {
     transform: rotateX(90deg);
@@ -144,13 +157,4 @@
   to {
     transform: rotateX(0deg);
   }
-}
-
-.Active .Down {
-  z-index: 3;
-  animation: flipDown .5s .5s linear both;
-}
-
-.Prev .Down {
-  z-index: 2;
 }
