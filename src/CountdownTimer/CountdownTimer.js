@@ -101,13 +101,6 @@ const CdTimer = props => {
     ]
   };
 
-  /*const digitsData = {
-    days: daysData,
-    hours: [{ max: 2, flip: 36000 }, { max: 9, flip: 3600 }],
-    mins: [{ max: 5, flip: 600 }, { max: 9, flip: 60 }],
-    secs: [{ max: 5, flip: 10 }, { max: 9, flip: 1 }]
-  };*/
-
   useInterval(
     () => {
       setDuration(totalTime - 1);
@@ -120,60 +113,6 @@ const CdTimer = props => {
 
   const renderElements = {};
 
-  /*const daysString = timeData['days']['formatted'].toString().split('');
-
-  renderElements['days'] = (
-    <div className={classnames(
-      classes.Unit,
-      classes.Days
-    )}>
-      {daysString.map((digit, i) => (
-        <Digit
-          id={`days-${i}`}
-          unit="days"
-          start={parseInt(digit)}
-          max={9}
-          flipIndicator={duration >= 86400 * i && (duration % (86400 * 1) === 0)}
-        />
-      ))}
-    </div>
-  )
-
-  Object.keys(convertedTime).forEach(unit => {
-    const time = convertedTime[unit];
-    renderElements[unit] = (
-      <div
-        className={classnames(
-          'inline-block',
-          classes.Unit,
-          classes[timeData[unit]['cssClass']]
-        )}
-      >
-        <Digit
-          id={`${unit}-tens`}
-          unit={unit}
-          start={Math.trunc(time / 10)}
-          max={digitsData[unit]['tens']['max']}
-          flipIndicator={
-            duration % digitsData[unit]['tens']['flip'] === 0
-          }
-        />
-        <Digit
-          id={`${unit}-ones`}
-          unit={unit}
-          start={time % 10}
-          max={digitsData[unit]['ones']['max']}
-          flipIndicator={
-            duration % digitsData[unit]['ones']['flip'] === 0
-          }
-        />
-        <div className={classes.UnitText}>{unit}</div>
-      </div>
-    );
-  });*/
-
-  console.log(timeData);
-
   Object.keys(timeData).forEach(unit => {
     const time = timeData[unit];
     const timeString = time["formatted"].toString().split("");
@@ -185,15 +124,6 @@ const CdTimer = props => {
           classes[timeData[unit]["cssClass"]]
         )}
       >
-        {/*<Digit
-          id={`${unit}-tens`}
-          unit={unit}
-          start={Math.trunc(time / 10)}
-          max={digitsData[unit]['tens']['max']}
-          flipIndicator={
-            duration % digitsData[unit]['tens']['flip'] === 0
-          }
-        />*/}
         {timeString.map((digit, i) => (
           <Digit
             id={`${unit}-${i}`}
