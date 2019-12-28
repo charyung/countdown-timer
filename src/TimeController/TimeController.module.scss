@@ -1,0 +1,23 @@
+.OperationToggle {
+    #opToggle {
+        display: none;
+
+        &:checked {
+            & ~ .Add, & ~ .Add * {
+                opacity: 0.8;
+            }
+
+            & ~ .Subtract, & ~ .Subtract * {
+                opacity: 1;
+            }
+        }
+    }
+
+    .Add, .Add * {
+        opacity: 1;
+    }
+
+    .Subtract, .Subtract * {
+        opacity: 0.8;
+    }
+}
