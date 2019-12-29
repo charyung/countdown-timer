@@ -50,9 +50,15 @@ Digit.defaultProps = {
 };
 
 const CdTimer = props => {
-    let diff = Math.max(props.time - new Date().getTime(), 0) / 1000;
+    let diff = Math.floor(
+        Math.max(props.time - new Date().getTime(), 0) / 1000
+    );
     const [duration, setDuration] = useState(diff);
-    const totalTime = Math.floor(diff);
+    if (diff > duration) { // if time increases
+        setDuration(diff);
+    }
+    console.log(diff, duration);
+    const totalTime = diff;
     const timeData = {};
 
     const days = Math.floor(diff / 86400); // 60 * 60 * 24
@@ -116,22 +122,26 @@ const CdTimer = props => {
     Object.keys(timeData).forEach(unit => {
         const time = timeData[unit];
         const timeString = time['formatted'].toString().split('');
+        while (timeString.length < time['digits'].length) {
+            timeString.unshift('0'); // pad array with 0s to match the length of digits array defined above
+        }
         renderElements[unit] = (
             <div
                 className={classnames(
                     'inline-block',
                     classes.Unit,
-                    classes[timeData[unit]['cssClass']]
+                    classes[time['cssClass']]
                 )}
             >
                 {timeString.map((digit, i) => (
                     <Digit
+                        id={`${unit}-${i}`}
                         key={`${unit}-${i}`}
                         unit={unit}
                         start={parseInt(digit)}
-                        max={timeData[unit]['digits'][i]['max']}
+                        max={time['digits'][i]['max']}
                         flipIndicator={
-                            duration % timeData[unit]['digits'][i]['flip'] === 0
+                            duration % time['digits'][i]['flip'] === 0
                         }
                     />
                 ))}
@@ -146,7 +156,7 @@ const CdTimer = props => {
                 [classes.SecondsLeft]: duration < 60
             })}
         >
-            {timeData['days']['formatted'] > 0 ? (
+            {duration >= 84000 ? (
                 <>
                     {renderElements['days']}
                     <div
@@ -159,7 +169,7 @@ const CdTimer = props => {
             ) : (
                 <></>
             )}
-            {timeData['mins']['formatted'] > 0 ? (
+            {duration >= 60 ? (
                 <>
                     {renderElements['hours']}
                     <div className={classnames(classes.UnitSeparator)}>:</div>

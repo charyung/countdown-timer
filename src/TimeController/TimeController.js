@@ -13,16 +13,17 @@ import {
 import classnames from 'classnames';
 import classes from './TimeController.module.scss';
 
-const Button = props => (
+const Button = ({ children, ...props }) => (
     <button
         className="px-4 py-1 my-1 rounded-full bg-gray-500 active:bg-gray-600"
         type="button"
+        {...props}
     >
-        {props.children}
+        {children}
     </button>
-)
+);
 
-const TimeController = props => {
+const TimeController = ({ modifyTime, ...props }) => {
     const [addTime, setAddTime] = useState(true);
 
     return (
@@ -59,15 +60,37 @@ const TimeController = props => {
                 <div className="p-2 m-2 rounded-lg bg-gray-300">
                     Preset
                     <div className="flex flex-col">
-                        <Button>1 second</Button>
-                        <Button>1 minute</Button>
-                        <Button>1 hour</Button>
-                        <Button>1 day</Button>
+                        <Button
+                            onClick={() => {
+                                modifyTime(1);
+                            }}
+                        >
+                            1 second
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                modifyTime(60);
+                            }}
+                        >
+                            1 minute
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                modifyTime(3600);
+                            }}
+                        >
+                            1 hour
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                modifyTime(86400);
+                            }}
+                        >
+                            1 day
+                        </Button>
                     </div>
                 </div>
-                <div className="p-2 m-2 rounded-lg bg-gray-300">
-                    Custom
-                </div>
+                <div className="p-2 m-2 rounded-lg bg-gray-300">Custom</div>
             </div>
         </div>
     );
