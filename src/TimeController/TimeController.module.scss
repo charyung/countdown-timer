@@ -4,20 +4,20 @@
 
         &:checked {
             & ~ .Add, & ~ .Add * {
-                opacity: 0.8;
+                opacity: 1;
             }
 
             & ~ .Subtract, & ~ .Subtract * {
-                opacity: 1;
+                opacity: 0.8;
             }
         }
     }
 
     .Add, .Add * {
-        opacity: 1;
+        opacity: 0.8;
     }
 
     .Subtract, .Subtract * {
-        opacity: 0.8;
+        opacity: 1;
     }
 }

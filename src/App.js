@@ -25,7 +25,7 @@ class App extends Component {
         return (
             <div className="App">
                 <CountdownTimer time={this.state.time} now={new Date().getTime()}/>
-                <TimeController modifyTime={this.modifyTime} resetToPresent={this.resetToPresent} />
+                <TimeController time={this.state.time} modifyTime={this.modifyTime} resetToPresent={this.resetToPresent} />
             </div>
         );
     }

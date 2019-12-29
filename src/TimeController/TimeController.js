@@ -15,7 +15,11 @@ import classes from './TimeController.module.scss';
 
 const Button = ({ children, ...props }) => (
     <button
-        className="px-4 py-1 my-1 rounded-full bg-gray-500 active:bg-gray-600"
+        className={classnames(
+            'px-4 py-1 my-1 rounded-full',
+            { 'bg-red-700 active:bg-red-800 text-white': props.colour === 'red' },
+            { 'bg-gray-500 active:bg-gray-600': !props.colour }
+        )}
         type="button"
         {...props}
     >
@@ -23,13 +27,19 @@ const Button = ({ children, ...props }) => (
     </button>
 );
 
-const TimeController = ({ modifyTime, ...props }) => {
+const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
     const [addTime, setAddTime] = useState(true);
+    const modifier = addTime ? 1 : -1;
+    const date = new Date(props.time);
 
     return (
         <div className="inline-block p-4 m-4 rounded-lg bg-gray-400 text-gray-800">
             <div className="text-lg">
                 <Icon icon={faClock} /> Time Control {addTime}
+            </div>
+
+            <div className="flex flex-col justify-center p-2 m-2 rounded-lg bg-gray-300">
+                {date.toLocaleDateString()} {date.toLocaleTimeString()}
             </div>
 
             <div className="flex">
@@ -62,31 +72,39 @@ const TimeController = ({ modifyTime, ...props }) => {
                     <div className="flex flex-col">
                         <Button
                             onClick={() => {
-                                modifyTime(1);
+                                modifyTime(1 * modifier);
                             }}
                         >
                             1 second
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(60);
+                                modifyTime(60 * modifier);
                             }}
                         >
                             1 minute
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(3600);
+                                modifyTime(3600 * modifier);
                             }}
                         >
                             1 hour
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(86400);
+                                modifyTime(86400 * modifier);
                             }}
                         >
                             1 day
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                resetToPresent();
+                            }}
+                            colour="red"
+                        >
+                            Now
                         </Button>
                     </div>
                 </div>
