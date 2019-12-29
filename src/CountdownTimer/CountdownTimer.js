@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useInterval } from './CountdownUtils';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -49,16 +49,15 @@ Digit.defaultProps = {
     start: 0
 };
 
+const calculateDiff = time =>
+    Math.floor(Math.max(time - new Date().getTime(), 0) / 1000);
+
 const CdTimer = props => {
-    let diff = Math.floor(
-        Math.max(props.time - new Date().getTime(), 0) / 1000
-    );
-    const [duration, setDuration] = useState(diff);
-    if (diff > duration) { // if time increases
-        setDuration(diff);
-    }
-    console.log(diff, duration);
-    const totalTime = diff;
+    const [duration, setDuration] = useState(calculateDiff(props.time));
+    useEffect(() => {
+        setDuration(calculateDiff(props.time));
+    }, [props.time]);
+    let diff = duration;
     const timeData = {};
 
     const days = Math.floor(diff / 86400); // 60 * 60 * 24
@@ -109,12 +108,12 @@ const CdTimer = props => {
 
     useInterval(
         () => {
-            setDuration(totalTime - 1);
+            setDuration(duration - 1);
             if (Math.floor(duration) === 0 && !!props.callback) {
                 props.callback.call();
             }
         },
-        Math.floor(duration) < 0 ? null : 1000
+        Math.floor(duration) <= 0 ? null : 1000
     );
 
     const renderElements = {};
@@ -141,7 +140,8 @@ const CdTimer = props => {
                         start={parseInt(digit)}
                         max={time['digits'][i]['max']}
                         flipIndicator={
-                            duration % time['digits'][i]['flip'] === 0
+                            duration % time['digits'][i]['flip'] === 0 &&
+                            duration > 0
                         }
                     />
                 ))}
