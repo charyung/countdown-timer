@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { TIME_IN_SECS } from '../constants.js';
 
 // FontAwesome
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
@@ -18,7 +19,10 @@ const Button = ({ children, ...props }) => (
     <button
         className={classnames(
             inputStyle,
-            { 'bg-red-700 active:bg-red-800 text-white': props.colour === 'red' },
+            {
+                'bg-red-700 active:bg-red-800 text-white':
+                    props.colour === 'red'
+            },
             { 'bg-gray-500 active:bg-gray-600': !props.colour }
         )}
         type="button"
@@ -76,28 +80,28 @@ const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
                     <div className="flex flex-col">
                         <Button
                             onClick={() => {
-                                modifyTime(1 * modifier);
+                                modifyTime(TIME_IN_SECS.second * modifier);
                             }}
                         >
                             1 second
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(60 * modifier);
+                                modifyTime(TIME_IN_SECS.minute * modifier);
                             }}
                         >
                             1 minute
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(3600 * modifier);
+                                modifyTime(TIME_IN_SECS.hour * modifier);
                             }}
                         >
                             1 hour
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(86400 * modifier);
+                                modifyTime(TIME_IN_SECS.day * modifier);
                             }}
                         >
                             1 day
@@ -142,15 +146,19 @@ const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
                                     }
                                 }}
                             >
-                                <option value="1">seconds</option>
-                                <option value="60">minutes</option>
-                                <option value="3600">hours</option>
-                                <option value="84000">days</option>
+                                <option value={TIME_IN_SECS.second}>seconds</option>
+                                <option value={TIME_IN_SECS.minute}>minutes</option>
+                                <option value={TIME_IN_SECS.hour}>hours</option>
+                                <option value={TIME_IN_SECS.day}>days</option>
                             </select>
                         </div>
-                        <Button onClick={() => {
-                            modifyTime(customTime * customUnit * modifier);
-                        }}>+</Button>
+                        <Button
+                            onClick={() => {
+                                modifyTime(customTime * customUnit * modifier);
+                            }}
+                        >
+                            +
+                        </Button>
                     </div>
                 </div>
             </div>

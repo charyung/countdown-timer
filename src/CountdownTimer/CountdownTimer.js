@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useInterval } from './CountdownUtils';
 import PropTypes from 'prop-types';
+import { TIME_IN_SECS } from '../constants.js';
+
+// CSS
 import classnames from 'classnames';
 import classes from './CountdownTimer.module.scss';
 
@@ -60,13 +63,13 @@ const CdTimer = props => {
     let diff = duration;
     const timeData = {};
 
-    const days = Math.floor(diff / 86400); // 60 * 60 * 24
+    const days = Math.floor(diff / TIME_IN_SECS.day);
     diff -= days * 86400;
     // Since days doesn't have an upper bound on its number of digits, we have to generate those
     const daysData = [];
     const daysString = days.toString();
     for (let i = 0; i < daysString.length; i++) {
-        daysData.push({ max: 9, flip: 84000 * i });
+        daysData.push({ max: 9, flip: TIME_IN_SECS.day * i });
     }
     timeData['days'] = {
         cssClass: 'Days',
@@ -74,25 +77,25 @@ const CdTimer = props => {
         digits: daysData
     };
 
-    const hours = Math.floor(diff / 3600); // 60 * 60
-    diff -= hours * 3600;
+    const hours = Math.floor(diff / TIME_IN_SECS.hour);
+    diff -= hours * TIME_IN_SECS.hour;
     timeData['hours'] = {
         cssClass: 'Hours',
         formatted: hours,
         digits: [
-            { max: 2, flip: 36000 },
-            { max: 9, flip: 3600 }
+            { max: 2, flip: TIME_IN_SECS.hour * 10 },
+            { max: 9, flip: TIME_IN_SECS.hour }
         ]
     };
 
-    const mins = Math.floor(diff / 60);
-    diff -= mins * 60;
+    const mins = Math.floor(diff / TIME_IN_SECS.minute);
+    diff -= mins * TIME_IN_SECS.minute;
     timeData['mins'] = {
         cssClass: 'Mins',
         formatted: mins,
         digits: [
-            { max: 5, flip: 600 },
-            { max: 9, flip: 60 }
+            { max: 5, flip: TIME_IN_SECS.minute * 10 },
+            { max: 9, flip: TIME_IN_SECS.minute }
         ]
     };
 
@@ -101,8 +104,8 @@ const CdTimer = props => {
         cssClass: 'Secs',
         formatted: secs,
         digits: [
-            { max: 5, flip: 10 },
-            { max: 9, flip: 1 }
+            { max: 5, flip: TIME_IN_SECS.second * 10 },
+            { max: 9, flip: TIME_IN_SECS.second }
         ]
     };
 
@@ -153,10 +156,10 @@ const CdTimer = props => {
     return (
         <div
             className={classnames('text-center', classes.CountdownTimer, {
-                [classes.SecondsLeft]: duration < 60
+                [classes.SecondsLeft]: duration < TIME_IN_SECS.minute
             })}
         >
-            {duration >= 84000 ? (
+            {duration >= TIME_IN_SECS.day ? (
                 <>
                     {renderElements['days']}
                     <div
@@ -169,7 +172,7 @@ const CdTimer = props => {
             ) : (
                 <></>
             )}
-            {duration >= 60 ? (
+            {duration >= TIME_IN_SECS.minute ? (
                 <>
                     {renderElements['hours']}
                     <div className={classnames(classes.UnitSeparator)}>:</div>
