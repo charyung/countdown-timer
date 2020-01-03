@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import CountdownTimer from './CountdownTimer/CountdownTimer';
-import logo from './logo.svg';
 import './App.css';
 
 import TimeController from './TimeController/TimeController';
@@ -14,7 +13,7 @@ class App extends Component {
     }
 
     modifyTime(time) {
-        this.setState({ time: this.state.time + (time * 1000) });
+        this.setState({ time: this.state.time + time * 1000 });
     }
 
     resetToPresent() {
@@ -24,8 +23,15 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <CountdownTimer time={this.state.time} now={new Date().getTime()}/>
-                <TimeController time={this.state.time} modifyTime={this.modifyTime} resetToPresent={this.resetToPresent} />
+                <CountdownTimer
+                    time={this.state.time}
+                    now={new Date().getTime()}
+                />
+                <TimeController
+                    time={this.state.time}
+                    modifyTime={this.modifyTime}
+                    resetToPresent={this.resetToPresent}
+                />
             </div>
         );
     }

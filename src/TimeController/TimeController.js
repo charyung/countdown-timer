@@ -43,7 +43,7 @@ const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
     return (
         <div className="inline-block p-4 m-4 rounded-lg bg-gray-400 text-gray-800">
             <div className="text-lg">
-                <Icon icon={faClock} /> Time Control {addTime}
+                <Icon icon={faClock} /> Time Control
             </div>
 
             <div className="flex flex-col justify-center p-2 m-2 rounded-lg bg-gray-300">
