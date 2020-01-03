@@ -21,3 +21,23 @@
         opacity: 1;
     }
 }
+
+.Dropdown {
+    position: relative;
+
+    &::after {
+        content: '';
+        height: 0;
+        width: 0;
+    
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid black;
+    
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 10px;
+        pointer-events: none;
+    }
+}
