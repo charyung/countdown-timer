@@ -34,11 +34,14 @@ const Button = ({ children, ...props }) => (
 
 const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
     const [addTime, setAddTime] = useState(true);
-    const modifier = addTime ? 1 : -1;
     const date = new Date(props.time);
 
     const [customTime, setCustomTime] = useState(0);
-    const [customUnit, setCustomUnit] = useState(0);
+    const [customUnit, setCustomUnit] = useState(1);
+
+    const moddedModifyTime = amount => {
+        modifyTime(amount * (addTime ? 1 : -1));
+    };
 
     return (
         <div className="inline-block p-4 m-4 rounded-lg bg-gray-400 text-gray-800">
@@ -80,28 +83,28 @@ const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
                     <div className="flex flex-col">
                         <Button
                             onClick={() => {
-                                modifyTime(TIME_IN_SECS.second * modifier);
+                                moddedModifyTime(TIME_IN_SECS.second);
                             }}
                         >
                             1 second
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(TIME_IN_SECS.minute * modifier);
+                                moddedModifyTime(TIME_IN_SECS.minute);
                             }}
                         >
                             1 minute
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(TIME_IN_SECS.hour * modifier);
+                                moddedModifyTime(TIME_IN_SECS.hour);
                             }}
                         >
                             1 hour
                         </Button>
                         <Button
                             onClick={() => {
-                                modifyTime(TIME_IN_SECS.day * modifier);
+                                moddedModifyTime(TIME_IN_SECS.day);
                             }}
                         >
                             1 day
@@ -154,10 +157,10 @@ const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
                         </div>
                         <Button
                             onClick={() => {
-                                modifyTime(customTime * customUnit * modifier);
+                                moddedModifyTime(customTime * customUnit);
                             }}
                         >
-                            +
+                            Modify
                         </Button>
                     </div>
                 </div>
