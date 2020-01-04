@@ -6,16 +6,17 @@ import { TIME_IN_SECS, TIME_LIMIT } from '../constants.js';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import {
     faClock,
-    faPlusCircle,
-    faMinusCircle
+    faPlus,
+    faMinus,
+    faUndoAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 // CSS
 import classnames from 'classnames';
 import classes from './TimeController.module.scss';
-const inputStyle = 'px-4 py-1 my-1 rounded-full';
+const inputStyle = 'px-4 py-1 m-1 rounded-full';
 
-const Button = ({ children, ...props }) => (
+/*const Button = ({ children, ...props }) => (
     <button
         className={classnames(
             inputStyle,
@@ -30,20 +31,54 @@ const Button = ({ children, ...props }) => (
     >
         {children}
     </button>
+);*/
+
+const Button = ({ children, ...props }) => (
+    <button
+        className={classnames(
+            'flex justify-center items-center h-8 w-8 m-1 rounded-full text-white',
+            {
+                'bg-red-700 active:bg-red-800': props.colour === 'red'
+            },
+            { 'bg-gray-700 active:bg-gray-900': !props.colour }
+        )}
+        type="button"
+        {...props}
+    >
+        {children}
+    </button>
 );
 
 const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
-    const [addTime, setAddTime] = useState(true);
+    //const [addTime, setAddTime] = useState(true);
     const date = new Date(props.time);
 
-    const [customTime, setCustomTime] = useState(0);
-    const [customUnit, setCustomUnit] = useState(1);
+    //const [customTime, setCustomTime] = useState(0);
+    //const [customUnit, setCustomUnit] = useState(1);
 
-    const moddedModifyTime = amount => {
-        const finalAmount = amount * (addTime ? 1 : -1);
+    const [customTime, setCustomTime] = useState({
+        day: 0,
+        hour: 0,
+        minute: 0,
+        second: 0
+    });
+
+    const moddedModifyTime = modifier => {
+        const finalAmount = Object.keys(customTime).reduce(
+            (acc, curr) => acc + customTime[curr] * TIME_IN_SECS[curr],
+            0
+        );
+
         if (Math.abs(props.time / 1000 + finalAmount) <= TIME_LIMIT) {
             modifyTime(finalAmount);
         }
+    };
+
+    const modifyField = (value, field) => {
+        setCustomTime({
+            ...customTime,
+            [field]: value
+        });
     };
 
     return (
@@ -57,31 +92,52 @@ const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
             </div>
 
             <div className="flex">
-                <div
-                    className={classnames(
-                        classes.OperationToggle,
-                        'flex flex-col justify-center p-2 m-2 rounded-lg bg-gray-300'
-                    )}
-                >
-                    <input
-                        id={classes.opToggle}
-                        type="checkbox"
-                        checked={addTime}
-                        onChange={() => {
-                            setAddTime(!addTime);
-                        }}
-                    />
-                    <label htmlFor={classes.opToggle} className={classes.Add}>
-                        <Icon icon={faPlusCircle} className="cursor-pointer" />
-                    </label>
-                    <label
-                        htmlFor={classes.opToggle}
-                        className={classes.Subtract}
-                    >
-                        <Icon icon={faMinusCircle} className="cursor-pointer" />
-                    </label>
-                </div>
                 <div className="p-2 m-2 rounded-lg bg-gray-300">
+                    Add Time
+                    <div className="flex flex-col">
+                        <input
+                            className={inputStyle}
+                            placeholder="Days"
+                            type="number"
+                            min="0"
+                            value={customTime['day']}
+                            onChange={e => {
+                                modifyField(parseInt(e.target.value), 'day');
+                            }}
+                        />
+                        <input
+                            className={inputStyle}
+                            placeholder="Hours"
+                            type="number"
+                            min="0"
+                            value={customTime['hour']}
+                            onChange={e => {
+                                modifyField(parseInt(e.target.value), 'hour');
+                            }}
+                        />
+                        <input
+                            className={inputStyle}
+                            placeholder="Minutes"
+                            type="number"
+                            min="0"
+                            value={customTime['minute']}
+                            onChange={e => {
+                                modifyField(parseInt(e.target.value), 'minute');
+                            }}
+                        />
+                        <input
+                            className={inputStyle}
+                            placeholder="Seconds"
+                            type="number"
+                            min="0"
+                            value={customTime['second']}
+                            onChange={e => {
+                                modifyField(parseInt(e.target.value), 'second');
+                            }}
+                        />
+                    </div>
+                </div>
+                {/*<div className="p-2 m-2 rounded-lg bg-gray-300">
                     Preset
                     <div className="flex flex-col">
                         <Button
@@ -166,6 +222,56 @@ const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
                             Modify
                         </Button>
                     </div>
+                </div>*/}
+                <div
+                    className={classnames(
+                        classes.OperationToggle,
+                        'flex flex-col justify-center p-2 m-2 rounded-lg bg-gray-300'
+                    )}
+                >
+                    {/*<input
+                        id={classes.opToggle}
+                        type="checkbox"
+                        checked={addTime}
+                        onChange={() => {
+                            setAddTime(!addTime);
+                        }}
+                    />
+                    <label htmlFor={classes.opToggle} className={classes.Add}>
+                        <Icon icon={faPlusCircle} className="cursor-pointer" />
+                    </label>
+                    <label
+                        htmlFor={classes.opToggle}
+                        className={classes.Subtract}
+                    >
+                        <Icon icon={faMinusCircle} className="cursor-pointer" />
+                    </label>*/}
+
+                    <Button
+                        onClick={() => {
+                            moddedModifyTime(1);
+                        }}
+                    >
+                        <Icon icon={faPlus} />
+                    </Button>
+
+                    <Button
+                        onClick={() => {
+                            moddedModifyTime(-1);
+                        }}
+                    >
+                        <Icon icon={faMinus} />
+                    </Button>
+
+                    <Button
+                        onClick={() => {
+                            resetToPresent();
+                        }}
+                        colour="red"
+                        title="Reset to present"
+                    >
+                        <Icon icon={faUndoAlt} />
+                    </Button>
                 </div>
             </div>
         </div>
