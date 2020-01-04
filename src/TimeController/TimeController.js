@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { TIME_IN_SECS } from '../constants.js';
+import { TIME_IN_SECS, TIME_LIMIT } from '../constants.js';
 
 // FontAwesome
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
@@ -40,7 +40,10 @@ const TimeController = ({ modifyTime, resetToPresent, ...props }) => {
     const [customUnit, setCustomUnit] = useState(1);
 
     const moddedModifyTime = amount => {
-        modifyTime(amount * (addTime ? 1 : -1));
+        const finalAmount = amount * (addTime ? 1 : -1);
+        if (Math.abs(props.time / 1000 + finalAmount) <= TIME_LIMIT) {
+            modifyTime(finalAmount);
+        }
     };
 
     return (
