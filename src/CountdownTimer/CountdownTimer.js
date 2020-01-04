@@ -64,7 +64,7 @@ const CdTimer = props => {
     const timeData = {};
 
     const days = Math.floor(diff / TIME_IN_SECS.day);
-    diff -= days * 86400;
+    diff -= days * TIME_IN_SECS.day;
     // Since days doesn't have an upper bound on its number of digits, we have to generate those
     const daysData = [];
     const daysString = days.toString();
