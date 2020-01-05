@@ -52,8 +52,7 @@ Digit.defaultProps = {
     start: 0
 };
 
-const calculateDiff = time =>
-    Math.floor(Math.max(time - new Date().getTime(), 0) / 1000);
+const calculateDiff = time => Math.floor(Math.max(time - Date.now(), 0) / 1000);
 
 const CdTimer = props => {
     const [duration, setDuration] = useState(calculateDiff(props.time));

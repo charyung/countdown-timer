@@ -8,7 +8,7 @@ import './App.css';
 class App extends Component {
     constructor() {
         super();
-        this.state = { time: new Date().getTime() };
+        this.state = { time: Date.now() };
         this.modifyTime = this.modifyTime.bind(this);
         this.setTime = this.setTime.bind(this);
         this.resetToPresent = this.resetToPresent.bind(this);
@@ -23,16 +23,13 @@ class App extends Component {
     }
 
     resetToPresent() {
-        this.setState({ time: new Date().getTime() });
+        this.setState({ time: Date.now() });
     }
 
     render() {
         return (
             <div className="App">
-                <CountdownTimer
-                    time={this.state.time}
-                    now={new Date().getTime()}
-                />
+                <CountdownTimer time={this.state.time} />
                 <TimeController
                     time={this.state.time}
                     modifyTime={this.modifyTime}

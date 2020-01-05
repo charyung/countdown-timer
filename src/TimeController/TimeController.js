@@ -15,25 +15,7 @@ import {
 
 // CSS
 import classnames from 'classnames';
-import classes from './TimeController.module.scss';
 const inputStyle = 'px-4 py-1 m-1 w-48 rounded-full';
-
-/*const Button = ({ children, ...props }) => (
-    <button
-        className={classnames(
-            inputStyle,
-            {
-                'bg-red-700 active:bg-red-800 text-white':
-                    props.colour === 'red'
-            },
-            { 'bg-gray-500 active:bg-gray-600': !props.colour }
-        )}
-        type="button"
-        {...props}
-    >
-        {children}
-    </button>
-);*/
 
 const Button = ({ children, ...props }) => (
     <button
@@ -52,11 +34,7 @@ const Button = ({ children, ...props }) => (
 );
 
 const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
-    //const [addTime, setAddTime] = useState(true);
     const date = new Date(props.time);
-
-    //const [customTime, setCustomTime] = useState(0);
-    //const [customUnit, setCustomUnit] = useState(1);
 
     const addTimeDefault = {
         day: 0,
@@ -184,116 +162,6 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                         </div>
                     </div>
                 </div>
-                {/*<div className="p-2 m-2 rounded-lg bg-gray-300">
-                    Preset
-                    <div className="flex flex-col">
-                        <Button
-                            onClick={() => {
-                                moddedModifyTime(TIME_IN_SECS.second);
-                            }}
-                        >
-                            1 second
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                moddedModifyTime(TIME_IN_SECS.minute);
-                            }}
-                        >
-                            1 minute
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                moddedModifyTime(TIME_IN_SECS.hour);
-                            }}
-                        >
-                            1 hour
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                moddedModifyTime(TIME_IN_SECS.day);
-                            }}
-                        >
-                            1 day
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                resetToPresent();
-                            }}
-                            colour="red"
-                        >
-                            Now
-                        </Button>
-                    </div>
-                </div>
-                <div className="p-2 m-2 rounded-lg bg-gray-300">
-                    Custom
-                    <div className="flex flex-col">
-                        <input
-                            className={inputStyle}
-                            placeholder="Duration"
-                            type="number"
-                            min="0"
-                            required
-                            value={customAddTime}
-                            onChange={e => {
-                                if (e.target.checkValidity()) {
-                                    setCustomAddTime(parseInt(e.target.value));
-                                }
-                            }}
-                        ></input>
-                        <div className={classes.Dropdown}>
-                            <select
-                                className={classnames(
-                                    inputStyle,
-                                    'appearance-none',
-                                    'w-full'
-                                )}
-                                value={customUnit}
-                                onChange={e => {
-                                    if (e.target.checkValidity()) {
-                                        setCustomUnit(parseInt(e.target.value));
-                                    }
-                                }}
-                            >
-                                <option value={TIME_IN_SECS.second}>seconds</option>
-                                <option value={TIME_IN_SECS.minute}>minutes</option>
-                                <option value={TIME_IN_SECS.hour}>hours</option>
-                                <option value={TIME_IN_SECS.day}>days</option>
-                            </select>
-                        </div>
-                        <Button
-                            onClick={() => {
-                                moddedModifyTime(customAddTime * customUnit);
-                            }}
-                        >
-                            Modify
-                        </Button>
-                    </div>
-                </div>*/}
-                {/*<div
-                    className={classnames(
-                        classes.OperationToggle,
-                        'flex flex-col justify-center p-2 m-2 rounded-lg bg-gray-300'
-                    )}
-                >
-                    <input
-                        id={classes.opToggle}
-                        type="checkbox"
-                        checked={addTime}
-                        onChange={() => {
-                            setAddTime(!addTime);
-                        }}
-                    />
-                    <label htmlFor={classes.opToggle} className={classes.Add}>
-                        <Icon icon={faPlusCircle} className="cursor-pointer" />
-                    </label>
-                    <label
-                        htmlFor={classes.opToggle}
-                        className={classes.Subtract}
-                    >
-                        <Icon icon={faMinusCircle} className="cursor-pointer" />
-                    </label>
-                </div>*/}
                 <div className="p-2 m-2 rounded-lg bg-gray-300">
                     Set Time
                     <div className="flex flex-col">
