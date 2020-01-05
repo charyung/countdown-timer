@@ -10,11 +10,16 @@ class App extends Component {
         super();
         this.state = { time: new Date().getTime() };
         this.modifyTime = this.modifyTime.bind(this);
+        this.setTime = this.setTime.bind(this);
         this.resetToPresent = this.resetToPresent.bind(this);
     }
 
     modifyTime(time) {
         this.setState({ time: this.state.time + time * 1000 });
+    }
+
+    setTime(time) {
+        this.setState({ time });
     }
 
     resetToPresent() {
@@ -31,6 +36,7 @@ class App extends Component {
                 <TimeController
                     time={this.state.time}
                     modifyTime={this.modifyTime}
+                    setTime={this.setTime}
                     resetToPresent={this.resetToPresent}
                 />
             </div>
