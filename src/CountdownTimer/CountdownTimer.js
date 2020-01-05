@@ -134,7 +134,7 @@ const CdTimer = props => {
                     classes[time['cssClass']]
                 )}
             >
-                {timeString.map((digit, i) => (
+                {timeString.split('').map((digit, i) => (
                     <Digit
                         id={`${unit}-${i}`}
                         key={`${unit}-${i}`}
