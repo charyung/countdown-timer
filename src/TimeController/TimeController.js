@@ -37,25 +37,25 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
     const date = new Date(props.time);
 
     const addTimeDefault = {
-        day: 0,
-        hour: 0,
-        minute: 0,
-        second: 0
+        day: '',
+        hour: '',
+        minute: '',
+        second: ''
     };
     const [customAddTime, setCustomAddTime] = useState(addTimeDefault);
 
     const formatTime = time => time.toString().padStart(2, '0');
     const setTimeDefault = {
-        date: `${date.getFullYear()}-${formatTime(date.getMonth() + 1)}-${formatTime(date.getDate())}`,
-        time: `${formatTime(date.getHours())}:${formatTime(date.getMinutes())}:${formatTime(date.getSeconds())}`
+        date: '',
+        time: ''
     };
     const [customSetTime, setCustomSetTime] = useState(setTimeDefault);
 
     const moddedModifyTime = modifier => {
-        const finalAmount = Object.keys(customAddTime).reduce(
-            (acc, curr) => acc + customAddTime[curr] * TIME_IN_SECS[curr],
-            0
-        ) * modifier;
+        const finalAmount =
+            Object.keys(customAddTime).reduce(
+                (acc, curr) => acc + (customAddTime[curr] || 0) * TIME_IN_SECS[curr], 0
+            ) * modifier;
 
         if (Math.abs(props.time / 1000 + finalAmount) <= TIME_LIMIT) {
             modifyTime(finalAmount);
@@ -93,7 +93,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
 
             <div className="flex flex-col sm:flex-row">
                 <div className="p-2 m-2 rounded-lg bg-gray-300">
-                    Add Time
+                    Modify Time
                     <div className="flex flex-col">
                         <input
                             className={inputStyle}
@@ -102,7 +102,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             min="0"
                             value={customAddTime['day']}
                             onChange={e => {
-                                modifyField(parseInt(e.target.value), 'day');
+                                modifyField(e.target.value ? parseInt(e.target.value) : '', 'day');
                             }}
                         />
                         <input
@@ -112,7 +112,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             min="0"
                             value={customAddTime['hour']}
                             onChange={e => {
-                                modifyField(parseInt(e.target.value), 'hour');
+                                modifyField(e.target.value ? parseInt(e.target.value) : '', 'hour');
                             }}
                         />
                         <input
@@ -140,6 +140,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                                 onClick={() => {
                                     moddedModifyTime(1);
                                 }}
+                                title="Add to current time"
                             >
                                 <Icon icon={faPlus} />
                             </Button>
@@ -148,6 +149,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                                 onClick={() => {
                                     moddedModifyTime(-1);
                                 }}
+                                title="Subtract from current time"
                             >
                                 <Icon icon={faMinus} />
                             </Button>
@@ -170,6 +172,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             className={inputStyle}
                             type="date"
                             pattern="\d{4}-\d{2}-\d{2}"
+                            placeholder="yyyy-mm-dd"
                             value={customSetTime['date']}
                             onChange={e => {
                                 setCustomSetTime({
@@ -183,6 +186,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             type="time"
                             step="1"
                             pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+                            placeholder="hh:mm:ss"
                             value={customSetTime['time']}
                             onChange={e => {
                                 setCustomSetTime({
@@ -196,7 +200,8 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                                 onClick={() => {
                                     const [year, month, day] = customSetTime['date'].split("-");
                                     const [hours, minute, second] = customSetTime['time'].split(":");
-                                    console.log(minute);
+                                    // Uglier but Date string parsing is REALLY bad
+                                    // https://stackoverflow.com/questions/2587345/why-does-date-parse-give-incorrect-results
                                     setTime(
                                         new Date(
                                             parseInt(year),
