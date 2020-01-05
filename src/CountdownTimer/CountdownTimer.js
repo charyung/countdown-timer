@@ -123,10 +123,9 @@ const CdTimer = props => {
 
     Object.keys(timeData).forEach(unit => {
         const time = timeData[unit];
-        const timeString = time['formatted'].toString().split('');
-        while (timeString.length < time['digits'].length) {
-            timeString.unshift('0'); // pad array with 0s to match the length of digits array defined above
-        }
+        const timeString = time['formatted']
+            .toString()
+            .padStart(time['digits'].length, '0');
         renderElements[unit] = (
             <div
                 className={classnames(
