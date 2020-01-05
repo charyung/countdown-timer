@@ -55,7 +55,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
         const finalAmount = Object.keys(customAddTime).reduce(
             (acc, curr) => acc + customAddTime[curr] * TIME_IN_SECS[curr],
             0
-        );
+        ) * modifier;
 
         if (Math.abs(props.time / 1000 + finalAmount) <= TIME_LIMIT) {
             modifyTime(finalAmount);
@@ -77,7 +77,8 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
 
             <div className="flex items-center justify-center">
                 <span className="flex-1 p-2 m-2 rounded-lg bg-gray-300">
-                    <Icon icon={faHourglassEnd} /> {date.toLocaleDateString()} {date.toLocaleTimeString()}
+                    <Icon icon={faHourglassEnd} className="mr-3" />
+                    {date.toLocaleDateString()} {date.toLocaleTimeString()}
                 </span>
                 <Button
                     onClick={() => {
