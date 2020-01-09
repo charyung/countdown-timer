@@ -195,6 +195,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             type="date"
                             pattern="\d{4}-\d{2}-\d{2}"
                             value={customSetTime['date']}
+                            required
                             onChange={e => {
                                 setCustomSetTime({
                                     date: e.target.value,
@@ -208,6 +209,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             step="1"
                             pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
                             value={customSetTime['time']}
+                            required
                             onChange={e => {
                                 setCustomSetTime({
                                     date: customSetTime['date'],
