@@ -5,7 +5,7 @@ import { TIME_IN_SECS } from '../constants.js';
 
 // CSS
 import classnames from 'classnames';
-import classes from './CountdownTimer.module.scss';
+import classes from './CountdownTimer.module.css';
 
 const DigitUnit = props => {
     return (

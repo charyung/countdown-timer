@@ -15,18 +15,11 @@ import {
 
 // CSS
 import classnames from 'classnames';
-import classes from './TimeController.module.scss';
-const inputStyle = 'px-4 py-1 m-1 sm:w-48 rounded-full';
+import classes from './TimeController.module.css';
 
-const Button = ({ children, ...props }) => (
+const Button = ({ children, className, ...props }) => (
     <button
-        className={classnames(
-            'flex justify-center items-center h-8 w-8 m-1 rounded-full text-white',
-            {
-                'bg-red-700 active:bg-red-800': props.colour === 'red'
-            },
-            { 'bg-gray-700 active:bg-gray-900': !props.colour }
-        )}
+        className={classnames(classes.Button, className)}
         type="button"
         {...props}
     >
@@ -75,18 +68,18 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
     };
 
     return (
-        <div
-            className={classnames(
-                classes.TimeControl,
-                'inline-block p-4 m-4 rounded-lg bg-gray-400 text-gray-800'
-            )}
-        >
+        <div className={classes.TimeControl}>
             <div className="text-lg">
                 <Icon icon={faClock} /> Time Control
             </div>
 
             <div className="flex items-center justify-center">
-                <span className="flex items-center flex-1 p-2 m-2 rounded-lg bg-gray-300">
+                <span
+                    className={classnames(
+                        'flex items-center flex-1',
+                        classes.InfoBlock
+                    )}
+                >
                     <Icon icon={faHourglassEnd} className="mx-1" />
                     <span className="flex-1">
                         {outOfBounds ? (
@@ -106,7 +99,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                         resetToPresent();
                         setOutOfBounds(false);
                     }}
-                    colour="red"
+                    className={classes.Red}
                     title="Reset to present"
                 >
                     <Icon icon={faUndoAlt} />
@@ -114,11 +107,10 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
             </div>
 
             <div className="flex flex-col sm:flex-row">
-                <div className="p-2 m-2 rounded-lg bg-gray-300">
+                <div className={classes.InfoBlock}>
                     Modify Time
                     <div className="flex flex-col">
                         <input
-                            className={inputStyle}
                             placeholder="Days"
                             type="number"
                             min="0"
@@ -128,7 +120,6 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             }}
                         />
                         <input
-                            className={inputStyle}
                             placeholder="Hours"
                             type="number"
                             min="0"
@@ -138,7 +129,6 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             }}
                         />
                         <input
-                            className={inputStyle}
                             placeholder="Minutes"
                             type="number"
                             min="0"
@@ -148,7 +138,6 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             }}
                         />
                         <input
-                            className={inputStyle}
                             placeholder="Seconds"
                             type="number"
                             min="0"
@@ -179,7 +168,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                                 onClick={() => {
                                     setCustomAddTime(addTimeDefault);
                                 }}
-                                colour="red"
+                                className={classes.Red}
                                 title="Reset to default value"
                             >
                                 <Icon icon={faUndoAlt} />
@@ -187,11 +176,10 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                         </div>
                     </div>
                 </div>
-                <div className="p-2 m-2 rounded-lg bg-gray-300">
+                <div className={classes.InfoBlock}>
                     Set Time
                     <div className="flex flex-col">
                         <input
-                            className={inputStyle}
                             type="date"
                             pattern="\d{4}-\d{2}-\d{2}"
                             value={customSetTime['date']}
@@ -204,7 +192,6 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             }}
                         />
                         <input
-                            className={inputStyle}
                             type="time"
                             step="1"
                             pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
@@ -242,7 +229,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                                 onClick={() => {
                                     setCustomSetTime(setTimeDefault);
                                 }}
-                                colour="red"
+                                className={classes.Red}
                                 title="Reset to default value"
                             >
                                 <Icon icon={faUndoAlt} />

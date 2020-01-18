@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
+import './App.css';
 import CountdownTimer from './CountdownTimer/CountdownTimer';
 import TimeController from './TimeController/TimeController';
-
-// CSS
-import './App.css';
 
 class App extends Component {
     constructor() {
