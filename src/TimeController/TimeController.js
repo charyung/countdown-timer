@@ -77,7 +77,8 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                     <span className="flex-1">
                         {outOfBounds ? (
                             <span className="text-red-700">
-                                Date must be between April 20th 271821 BCE and September 12, 275760 CE.
+                                Date must be between April 20, 271821 BCE and
+                                September 12, 275760 CE.
                             </span>
                         ) : (
                             <>
