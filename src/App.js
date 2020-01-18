@@ -1,42 +1,34 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import CountdownTimer from './CountdownTimer/CountdownTimer';
 import TimeController from './TimeController/TimeController';
 
-class App extends Component {
-    constructor() {
-        super();
-        this.state = { time: Date.now() };
-        this.modifyTime = this.modifyTime.bind(this);
-        this.setTime = this.setTime.bind(this);
-        this.resetToPresent = this.resetToPresent.bind(this);
-    }
+const App = () => {
+    const [time, setTime] = useState(Date.now());
 
-    modifyTime(time) {
-        this.setState({ time: this.state.time + time * 1000 });
-    }
+    const modifyTime = addedTime => {
+        setTime(time + addedTime * 1000);
+    };
 
-    setTime(time) {
-        this.setState({ time });
-    }
+    const setNewTime = newTime => {
+        setTime(newTime);
+    };
 
-    resetToPresent() {
-        this.setState({ time: Date.now() });
-    }
+    const resetToPresent = () => {
+        setTime(Date.now());
+    };
 
-    render() {
-        return (
-            <div className="App">
-                <CountdownTimer time={this.state.time} />
-                <TimeController
-                    time={this.state.time}
-                    modifyTime={this.modifyTime}
-                    setTime={this.setTime}
-                    resetToPresent={this.resetToPresent}
-                />
-            </div>
-        );
-    }
-}
+    return (
+        <div className="App">
+            <CountdownTimer time={time} />
+            <TimeController
+                time={time}
+                modifyTime={modifyTime}
+                setTime={setNewTime}
+                resetToPresent={resetToPresent}
+            />
+        </div>
+    );
+};
 
 export default App;
