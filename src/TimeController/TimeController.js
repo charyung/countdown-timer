@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { TIME_IN_SECS, TIME_LIMIT } from '../constants.js';
+import { TIME_IN_SECS, TIME_LIMIT } from '../constants';
+
+// Components
+import Button from './ControllerButton';
 
 // FontAwesome
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
@@ -17,33 +20,23 @@ import {
 import classnames from 'classnames';
 import classes from './TimeController.module.css';
 
-const Button = ({ children, className, ...props }) => (
-    <button
-        className={classnames(classes.Button, className)}
-        type="button"
-        {...props}
-    >
-        {children}
-    </button>
-);
+const addTimeDefault = {
+    day: '',
+    hour: '',
+    minute: '',
+    second: ''
+};
+
+const formatTime = time => time.toString().padStart(2, '0');
+const setTimeDefault = date => ({
+    date: `${date.getFullYear()}-${formatTime(date.getMonth() + 1)}-${formatTime(date.getDate())}`,
+    time: `${formatTime(date.getHours())}:${formatTime(date.getMinutes())}:${formatTime(date.getSeconds())}`
+});
 
 const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
     const date = new Date(props.time);
-
-    const addTimeDefault = {
-        day: '',
-        hour: '',
-        minute: '',
-        second: ''
-    };
     const [customAddTime, setCustomAddTime] = useState(addTimeDefault);
-
-    const formatTime = time => time.toString().padStart(2, '0');
-    const setTimeDefault = {
-        date: `${date.getFullYear()}-${formatTime(date.getMonth() + 1)}-${formatTime(date.getDate())}`,
-        time: `${formatTime(date.getHours())}:${formatTime(date.getMinutes())}:${formatTime(date.getSeconds())}`
-    };
-    const [customSetTime, setCustomSetTime] = useState(setTimeDefault);
+    const [customSetTime, setCustomSetTime] = useState(setTimeDefault(date));
 
     const [outOfBounds, setOutOfBounds] = useState(false);
     const moddedModifyTime = modifier => {

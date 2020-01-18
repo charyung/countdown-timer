@@ -1,56 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useInterval } from './CountdownUtils';
 import PropTypes from 'prop-types';
-import { TIME_IN_SECS } from '../constants.js';
+import { TIME_IN_SECS } from '../constants';
+
+// Components
+import Digit from './Digit';
 
 // CSS
 import classnames from 'classnames';
 import classes from './CountdownTimer.module.css';
-
-const DigitUnit = props => {
-    return (
-        <div className={classnames(classes.DigitUnit, props.className)}>
-            <div className={classes.Up}>
-                <div className={classes.Num}>{props.number}</div>
-            </div>
-            <div className={classes.Center} />
-            <div className={classes.Down}>
-                <div className={classes.Num}>{props.number}</div>
-            </div>
-        </div>
-    );
-};
-
-const Digit = props => {
-    const nextNum = props.start === 0 ? props.max : props.start - 1;
-
-    return (
-        <div className={classes.Digit}>
-            <DigitUnit
-                key={`${props.id}-${nextNum}`}
-                number={nextNum}
-                className={{ [classes.Active]: props.flipIndicator }}
-            />
-            <DigitUnit
-                key={`${props.id}-${props.start}`}
-                number={props.start}
-                className={{ [classes.Prev]: props.flipIndicator }}
-            />
-        </div>
-    );
-};
-
-Digit.propTypes = {
-    id: PropTypes.string, // For key purposes
-    max: PropTypes.number, // Highest digit. For example, 5 for the tens place of a secs counter because there can only be 60 secs in a minute
-    start: PropTypes.number, // The starting digit
-    flipIndicator: PropTypes.bool // When this prop hits 0, then this digit plays the flip animation.
-};
-
-Digit.defaultProps = {
-    max: 9,
-    start: 0
-};
 
 const calculateDiff = time => Math.floor(Math.max(time - Date.now(), 0) / 1000);
 
