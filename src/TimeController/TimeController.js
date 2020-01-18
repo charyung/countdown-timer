@@ -109,7 +109,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             min="0"
                             value={customAddTime['day']}
                             onChange={e => {
-                                modifyField(e.target.value ? parseInt(e.target.value) : '', 'day');
+                                modifyField(parseInt(e.target.value), 'day');
                             }}
                         />
                         <input
@@ -118,7 +118,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             min="0"
                             value={customAddTime['hour']}
                             onChange={e => {
-                                modifyField(e.target.value ? parseInt(e.target.value) : '', 'hour');
+                                modifyField(parseInt(e.target.value), 'hour');
                             }}
                         />
                         <input
@@ -200,18 +200,19 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                         <div className="flex justify-center">
                             <Button
                                 onClick={() => {
-                                    const [year, month, day] = customSetTime['date'].split("-");
-                                    const [hours, minute, second] = customSetTime['time'].split(":");
+                                    // For some reason, months are implemented such that the internal value is 1 less
+                                    // than the value that humans are used to, but only months
+                                    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Examples
+                                    const [year, month, day] = customSetTime['date'].split("-").map(v => parseInt(v));
+                                    const time = customSetTime['time'].split(":").map(v => parseInt(v));
                                     // Uglier but Date string parsing is REALLY bad
                                     // https://stackoverflow.com/questions/2587345/why-does-date-parse-give-incorrect-results
                                     setTime(
                                         new Date(
-                                            parseInt(year),
-                                            parseInt(month) - 1,
-                                            parseInt(day),
-                                            parseInt(hours),
-                                            parseInt(minute),
-                                            parseInt(second)
+                                            year,
+                                            month - 1,
+                                            day,
+                                            ...time
                                         ).getTime()
                                     );
                                 }}
@@ -220,7 +221,7 @@ const TimeController = ({ modifyTime, setTime, resetToPresent, ...props }) => {
                             </Button>
                             <Button
                                 onClick={() => {
-                                    setCustomSetTime(setTimeDefault);
+                                    setCustomSetTime(setTimeDefault(date));
                                 }}
                                 className={classes.Red}
                                 title="Reset to default value"
